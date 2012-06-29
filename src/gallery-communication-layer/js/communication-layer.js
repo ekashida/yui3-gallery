@@ -436,6 +436,10 @@
                  * @public
                  */
                 purge: function () {
+                    if (!proxy) {
+                        return;
+                    }
+
                     Y.Object.each(self._proxyFor, function (value, key) {
                         if (value === proxy) {
                             Y.log('Deleting internal event proxy from the lookup table: '+key, 'info', NAME);
