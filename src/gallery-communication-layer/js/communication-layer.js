@@ -442,7 +442,6 @@
 
                     Y.Object.each(self._proxyFor, function (value, key) {
                         if (value === proxy) {
-                            Y.log('Deleting internal event proxy from the lookup table: '+key, 'info', NAME);
                             self._deleteEventProxy(key);
                         }
                     });
@@ -760,7 +759,7 @@
          * @private
          */
         _deleteEventProxy: function (key) {
-            Y.log('Deleting event proxy for '+key, 'debug', NAME);
+            Y.log('Deleting internal event proxy from the lookup table: '+key, 'debug', NAME);
             if (this._proxyFor[key]) {
                 this._proxyFor[key].detachAll();
                 this._proxyFor[key] = null;
@@ -849,8 +848,7 @@
          * @private
          */
         _initDebugMode: function () {
-            var self = this,
-                proxy = self._createEventProxy('debug');
+            var proxy = this._createEventProxy('debug');
 
             Y.log('Initializing debug mode', 'warn', NAME);
 
@@ -877,13 +875,12 @@
             // leak incoming/outgoing events through to the debug event
             // proxy.
             Y.Array.each(['fire', 'on', 'once'], function (name) {
-                var orig = self[name]; // save original
-                self[name] = function () {
-                    var args = Y.Array(arguments);
-                    proxy[name].apply(proxy, args);
-                    orig.apply(self, args);
+                var orig = this[name]; // save original
+                this[name] = function () {
+                    proxy[name].apply(proxy, arguments);
+                    orig.apply(this, arguments);
                 };
-            });
+            }, this);
         },
 
         // -- Y.one('window').on('message', ...) IE9 workarounds -----
