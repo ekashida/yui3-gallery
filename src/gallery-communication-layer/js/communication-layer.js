@@ -6,14 +6,15 @@
  * @requires json, node-base, event-custom-base
  */
 
+// Include the href for friendlier logs
+var NAME = 'gallery-communication-layer ['+Y.config.win.location.href+']';
+
     /**
      * @class CommunicationLayer
      * @param config {Object} Configuration object
      * @constructor
      */
     function CommunicationLayer (config) {
-        NAME = NAME+': '+Y.config.win.location.pathname; // friendlier logs
-
         config = config || {};
 
         this._WIN               = Y.config.win;
